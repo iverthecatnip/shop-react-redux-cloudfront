@@ -1,3 +1,9 @@
+# Homework
+
+- [S3 bucket link](http://anastassiya-second-app-bucket.s3-website-eu-west-1.amazonaws.com/)
+- [CloudFront Link](https://d3da297zzbm0n4.cloudfront.net)
+
+
 # React-shop-cloudfront
 
 This is frontend starter project for nodejs-aws mentoring program. It uses the following technologies:
