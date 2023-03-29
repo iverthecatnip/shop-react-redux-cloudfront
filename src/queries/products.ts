@@ -1,6 +1,6 @@
 import axios, { AxiosError } from "axios";
 import API_PATHS from "~/constants/apiPaths";
-import { AvailableProduct } from "~/models/Product";
+import { AvailableProduct, Product } from "~/models/Product";
 import { useQuery, useQueryClient, useMutation } from "react-query";
 import React from "react";
 
@@ -9,7 +9,19 @@ export function useAvailableProducts() {
     "available-products",
     async () => {
       const res = await axios.get<AvailableProduct[]>(
-        `${API_PATHS.bff}/product/available`
+        `${API_PATHS.bff}/products`
+      );
+      return res.data;
+    }
+  );
+}
+
+export function useProductById(id: string | undefined) {
+  return useQuery<Product, AxiosError>(
+    `product-${id}`,
+    async () => {
+      const res = await axios.get<Product>(
+        `${API_PATHS.bff}/products/${id}`
       );
       return res.data;
     }
