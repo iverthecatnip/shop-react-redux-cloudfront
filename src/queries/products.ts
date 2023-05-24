@@ -41,7 +41,7 @@ export function useAvailableProduct(id?: string) {
     ["product", { id }],
     async () => {
       const res = await axios.get<AvailableProduct>(
-        `${API_PATHS.bff}/product/${id}`
+        `${API_PATHS.bff}/products/${id}`
       );
       return res.data;
     },
@@ -61,16 +61,16 @@ export function useRemoveProductCache() {
 export function useUpsertAvailableProduct() {
   return useMutation((values: AvailableProduct) =>
     axios.post<AvailableProduct>(`${API_PATHS.bff}/products`, values, {
-      // headers: {
-      //   Authorization: `Basic ${localStorage.getItem("authorization_token")}`,
-      // },
+      headers: {
+        Authorization: `Basic ${localStorage.getItem("authorization_token")}`,
+      },
     })
   );
 }
 
 export function useDeleteAvailableProduct() {
   return useMutation((id: string) =>
-    axios.delete(`${API_PATHS.bff}/product/${id}`, {
+    axios.delete(`${API_PATHS.bff}/products/${id}`, {
       headers: {
         Authorization: `Basic ${localStorage.getItem("authorization_token")}`,
       },

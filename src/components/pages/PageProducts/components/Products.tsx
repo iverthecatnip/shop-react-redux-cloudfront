@@ -41,7 +41,7 @@ export default function Products() {
               <Typography>{formatAsPrice(product.price)}</Typography>
             </CardContent>
             <CardActions>
-              <AddProductToCart product={product} />
+              <AddProductToCart product={product} showInStock/>
             </CardActions>
           </Card>
         </Grid>

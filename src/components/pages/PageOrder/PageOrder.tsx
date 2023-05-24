@@ -35,15 +35,15 @@ export default function PageOrder() {
     {
       queryKey: ["order", { id }],
       queryFn: async () => {
-        const res = await axios.get<Order>(`${API_PATHS.order}/order/${id}`);
-        return res.data;
+        const res = await axios.get<Order>(`${API_PATHS.order}/orders/${id}`);
+        return res.data.data?.orders;
       },
     },
     {
       queryKey: "products",
       queryFn: async () => {
         const res = await axios.get<AvailableProduct[]>(
-          `${API_PATHS.bff}/product/available`
+          `${API_PATHS.bff}/products`
         );
         return res.data;
       },
@@ -70,24 +70,21 @@ export default function PageOrder() {
 
   if (isOrderLoading || isProductsLoading) return <p>loading...</p>;
 
-  const statusHistory = order?.statusHistory || [];
-
-  const lastStatusItem = statusHistory[statusHistory.length - 1];
 
   return order ? (
     <PaperLayout>
       <Typography component="h1" variant="h4" align="center">
         Manage order
       </Typography>
-      <ReviewOrder address={order.address} items={cartItems} />
+      <ReviewOrder address={order.delivery} items={cartItems} />
       <Typography variant="h6">Status:</Typography>
       <Typography variant="h6" color="primary">
-        {lastStatusItem?.status.toUpperCase()}
+        {order?.status.toUpperCase()}
       </Typography>
       <Typography variant="h6">Change status:</Typography>
       <Box py={2}>
         <Formik
-          initialValues={{ status: lastStatusItem.status, comment: "" }}
+          initialValues={{ status: order.status, comment: "" }}
           enableReinitialize
           onSubmit={(values) =>
             updateOrderStatus(
@@ -119,16 +116,6 @@ export default function PageOrder() {
                     ))}
                   </Field>
                 </Grid>
-                <Grid item xs={12}>
-                  <Field
-                    component={TextField}
-                    name="comment"
-                    label="Comment"
-                    fullWidth
-                    autoComplete="off"
-                    multiline
-                  />
-                </Grid>
                 <Grid item container xs={12} justifyContent="space-between">
                   <Button
                     type="submit"
@@ -144,31 +131,6 @@ export default function PageOrder() {
           )}
         </Formik>
       </Box>
-      <Typography variant="h6">Status history:</Typography>
-      <TableContainer>
-        <Table aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Status</TableCell>
-              <TableCell align="right">Date and Time</TableCell>
-              <TableCell align="right">Comment</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {statusHistory.map((statusHistoryItem) => (
-              <TableRow key={order.id}>
-                <TableCell component="th" scope="row">
-                  {statusHistoryItem.status.toUpperCase()}
-                </TableCell>
-                <TableCell align="right">
-                  {new Date(statusHistoryItem.timestamp).toString()}
-                </TableCell>
-                <TableCell align="right">{statusHistoryItem.comment}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
     </PaperLayout>
   ) : null;
 }
